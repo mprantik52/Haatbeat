@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product List</title>
+  <link rel="stylesheet" href="viewProductStyle.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Product List</h1>
+    
+    <!-- Table for displaying products -->
+    <table id="products-table">
+      <thead class="header-group">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Product rows will be inserted here dynamically -->
+      </tbody>
+    </table>
+    
+    <!-- Go Back button -->
+    <button type="button" class="btn" style="margin-top: 10px;" onclick="goBack()">Go back</button> <!-- Changed to type="button" -->
+  </div>
+
+  <script>
+    // Fetch the products from the server when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('http://localhost:8080/products')  // Replace with your actual API endpoint
+        .then(response => response.json())
+        .then(products => {
+          const tableBody = document.querySelector('#products-table tbody');
+          
+          // Clear any existing rows (if any)
+          tableBody.innerHTML = '';
+
+          // Loop through the products and create table rows
+          products.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = ` 
+              <td>${product.id}</td>
+              <td>${product.name}</td>
+              <td>$${product.price}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching products:', error);
+        });
+    });
+
+    // Function to go back to index.html
+    function goBack() {
+      window.location.href = 'index.html';  // Redirects to index.html
+    }
+  </script>
+</body>
+</html>
